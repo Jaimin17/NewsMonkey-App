@@ -14,10 +14,6 @@ const News = (props) => {
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
 
-  document.title = `${capitalizeFirstLetter(
-    props.category
-  )} - MonkeyNews`;
-
   const updateNews = async () => {
     props.setProgress(10);
     const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey} &page=${page}&pageSize=${props.pageSize}`;
@@ -40,18 +36,22 @@ const News = (props) => {
     }&pageSize=${props.pageSize}`;
     let data = await fetch(url);
     let parseData = await data.json();
-    setPage(page + 1);
-    setArticle(article.concat(parseData.articles));
-    setTotalResults(parseData.totalResults);
+    await setPage(page + 1);
+    await setArticle(article.concat(parseData.articles));
+    // setTotalResults(parseData.totalResults);
   };
 
   useEffect(() => {
+    document.title = `${capitalizeFirstLetter(
+      props.category
+    )} - MonkeyNews`;
     updateNews();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
-      <h1 className="text-center" style={{ margin: "20px 0px" }}>
+      <h1 className="text-center" style={{ margin: "20px 0px", marginTop: '67px' }}>
         NewsMonkey - Top {capitalizeFirstLetter(props.category)} Headlines
       </h1>
       {loading && <Loader />}
